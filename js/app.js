@@ -1,0 +1,290 @@
+const state = {
+  repos: [],
+  filter: "all",
+};
+
+const els = {
+  bar: document.getElementById("top-app-bar"),
+  themeToggle: document.getElementById("theme-toggle"),
+  themeIcon: document.getElementById("theme-icon"),
+  filters: document.getElementById("filters"),
+  catalog: document.getElementById("catalog"),
+  featuredStack: document.getElementById("featured-stack"),
+  statRepos: document.getElementById("stat-repos"),
+  statTypes: document.getElementById("stat-types"),
+  statUpdated: document.getElementById("stat-updated"),
+  year: document.getElementById("year"),
+};
+
+function preferredTheme() {
+  const saved = localStorage.getItem("aztrx-theme");
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem("aztrx-theme", theme);
+  if (els.themeIcon) {
+    els.themeIcon.textContent = theme === "dark" ? "light_mode" : "dark_mode";
+  }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) {
+    meta.setAttribute("content", theme === "dark" ? "#111318" : "#f8f9ff");
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return "—";
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    year: "numeric",
+  }).format(new Date(iso));
+}
+
+function displayName(repo) {
+  return AZTRX.curated[repo.name]?.displayName || repo.name.replaceAll("_", " ").replaceAll("-", " ");
+}
+
+function description(repo) {
+  return AZTRX.curated[repo.name]?.tagline || repo.description || "A public AZTRX Studio project on GitHub.";
+}
+
+function iconFor(repo, category) {
+  return AZTRX.curated[repo.name]?.icon || category.icon;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+async function fetchPublicRepos() {
+  const url = `https://api.github.com/users/${AZTRX.githubUser}/repos?per_page=100&sort=updated`;
+  const response = await fetch(url, {
+    headers: { Accept: "application/vnd.github+json" },
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API ${response.status}`);
+  }
+
+  const repos = await response.json();
+  return repos
+    .filter((repo) => !repo.fork && !repo.private && !AZTRX.excludeRepos.includes(repo.name))
+    .map((repo) => ({
+      name: repo.name,
+      description: repo.description,
+      html_url: repo.html_url,
+      homepage: repo.homepage,
+      language: repo.language,
+      stargazers_count: repo.stargazers_count,
+      forks_count: repo.forks_count,
+      updated_at: repo.updated_at,
+      topics: repo.topics || [],
+      license: repo.license?.spdx_id || repo.license?.name || "",
+      category: categorizeRepo(repo),
+    }));
+}
+
+function fallbackRepos() {
+  return Object.entries(AZTRX.curated).map(([name, meta]) => ({
+    name,
+    description: meta.tagline,
+    html_url: `${AZTRX.githubUrl}/${name}`,
+    homepage: "",
+    language: name === "PULSE" ? "TypeScript" : "Java",
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: "",
+    topics: [],
+    license: "",
+    category: meta.category,
+  }));
+}
+
+function renderFilters(repos) {
+  const present = new Set(repos.map((repo) => repo.category));
+  const chips = [
+    { id: "all", label: "All", icon: "apps" },
+    ...AZTRX.categories
+      .filter((category) => present.has(category.id))
+      .map((category) => ({ id: category.id, label: category.chip, icon: category.icon })),
+  ];
+
+  els.filters.innerHTML = chips
+    .map(
+      (chip) => `
+        <button class="chip" type="button" data-filter="${chip.id}" aria-pressed="${chip.id === state.filter}">
+          <span class="material-symbols-outlined" aria-hidden="true">${chip.icon}</span>
+          ${escapeHtml(chip.label)}
+        </button>
+      `,
+    )
+    .join("");
+}
+
+function renderFeatured(repos) {
+  const picks = AZTRX.categories
+    .map((category) => repos.find((repo) => repo.category === category.id))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  els.featuredStack.innerHTML = picks
+    .map((repo) => {
+      const category = AZTRX.categories.find((item) => item.id === repo.category);
+      return `
+        <a class="mini-card" href="#${category.id}">
+          <div class="mini-icon">
+            <span class="material-symbols-outlined" aria-hidden="true">${iconFor(repo, category)}</span>
+          </div>
+          <div>
+            <h3>${escapeHtml(displayName(repo))}</h3>
+            <p>${escapeHtml(category.title)}</p>
+          </div>
+          <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+        </a>
+      `;
+    })
+    .join("");
+}
+
+function cardMarkup(repo, category, featured) {
+  const curated = AZTRX.curated[repo.name];
+  const highlights = curated?.highlights || [...(repo.topics || [])].slice(0, 3);
+  const home = repo.homepage && /^https?:\/\//.test(repo.homepage) ? repo.homepage : "";
+
+  return `
+    <article class="project-card${featured ? " featured" : ""}">
+      <div class="card-media ${category.id}" aria-hidden="true">
+        <span class="material-symbols-outlined">${iconFor(repo, category)}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          ${repo.language ? `<span class="badge lang">${escapeHtml(repo.language)}</span>` : ""}
+          ${repo.license ? `<span class="badge">${escapeHtml(repo.license)}</span>` : ""}
+          <span class="badge">
+            <span class="material-symbols-outlined" style="font-size:1rem">star</span>
+            ${repo.stargazers_count}
+          </span>
+          ${repo.updated_at ? `<span class="badge">Updated ${escapeHtml(formatDate(repo.updated_at))}</span>` : ""}
+        </div>
+        <h3>${escapeHtml(displayName(repo))}</h3>
+        <p class="desc">${escapeHtml(description(repo))}</p>
+        ${
+          highlights.length
+            ? `<ul class="highlights">${highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+            : ""
+        }
+        <div class="card-actions">
+          <a class="btn btn-filled btn-sm" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined" aria-hidden="true">code</span>
+            View on GitHub
+          </a>
+          ${
+            home
+              ? `<a class="btn btn-tonal btn-sm" href="${escapeHtml(home)}" target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                  Open project
+                </a>`
+              : ""
+          }
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderCatalog(repos) {
+  const filtered = state.filter === "all" ? repos : repos.filter((repo) => repo.category === state.filter);
+  const visibleCategories = AZTRX.categories.filter((category) =>
+    filtered.some((repo) => repo.category === category.id),
+  );
+
+  if (!visibleCategories.length) {
+    els.catalog.innerHTML = `<p class="empty-state">No public projects in this section yet.</p>`;
+    return;
+  }
+
+  els.catalog.innerHTML = visibleCategories
+    .map((category) => {
+      const items = filtered.filter((repo) => repo.category === category.id);
+      const cards = items
+        .map((repo, index) => cardMarkup(repo, category, items.length === 1 || index === 0))
+        .join("");
+
+      return `
+        <section class="section" id="${category.id}" aria-labelledby="${category.id}-title">
+          <div class="section-head">
+            <div class="section-copy">
+              <h2 id="${category.id}-title">
+                <span class="section-icon">
+                  <span class="material-symbols-outlined" aria-hidden="true">${category.icon}</span>
+                </span>
+                ${escapeHtml(category.title)}
+              </h2>
+              <p>${escapeHtml(category.subtitle)}</p>
+            </div>
+          </div>
+          <div class="project-grid">
+            ${cards}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
+function renderStats(repos) {
+  const types = new Set(repos.map((repo) => repo.category));
+  els.statRepos.textContent = String(repos.length);
+  els.statTypes.textContent = String(types.size);
+
+  const latest = repos
+    .map((repo) => repo.updated_at)
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+  els.statUpdated.textContent = latest ? formatDate(latest) : "Live";
+}
+
+function render(repos) {
+  state.repos = repos;
+  renderFilters(repos);
+  renderFeatured(repos);
+  renderCatalog(repos);
+  renderStats(repos);
+}
+
+els.filters?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-filter]");
+  if (!button) return;
+  state.filter = button.dataset.filter;
+  renderFilters(state.repos);
+  renderCatalog(state.repos);
+});
+
+els.themeToggle?.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(next);
+});
+
+window.addEventListener("scroll", () => {
+  els.bar?.classList.toggle("is-scrolled", window.scrollY > 8);
+}, { passive: true });
+
+if (els.year) {
+  els.year.textContent = String(new Date().getFullYear());
+}
+
+applyTheme(preferredTheme());
+render(fallbackRepos());
+
+fetchPublicRepos()
+  .then(render)
+  .catch(() => {
+    /* Curated fallback already rendered. */
+  });

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111318" />
+    <meta
+      name="description"
+      content="AZTRX Studio — public games, Minecraft mods, and experiments from Azturax."
+    />
+    <meta property="og:title" content="AZTRX Studio" />
+    <meta property="og:description" content="Public games, Minecraft mods, and experiments." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://azturax.github.io/" />
+    <title>AZTRX Studio — Games, Mods & Experiments</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("aztrx-theme");
+        var theme = saved || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Roboto:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..600,0..1,0"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#projects">Skip to projects</a>
+
+    <header class="top-app-bar" id="top-app-bar">
+      <a class="brand" href="#top">
+        <img src="assets/logo.svg" alt="" width="40" height="40" />
+        <span class="brand-lockup">
+          <span class="brand-name">AZTRX</span>
+          <span class="brand-tag">Studio</span>
+        </span>
+      </a>
+      <nav class="nav-pills" aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="#mods">Mods</a>
+        <a href="#games">Games</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+      </button>
+      <a class="icon-btn" href="https://github.com/Azturax" target="_blank" rel="noopener noreferrer" aria-label="AZTRX Studio on GitHub">
+        <span class="material-symbols-outlined">code</span>
+      </a>
+    </header>
+
+    <main class="main" id="top">
+      <section class="hero">
+        <div>
+          <p class="kicker">
+            <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+            AZTRX Studio
+          </p>
+          <h1>AZTRX<span>Studio</span></h1>
+          <p class="lede">
+            The public home of AZTRX Studio — Minecraft mods, games, and experiments,
+            grouped by type. Live from GitHub, at azturax.github.io.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-filled" href="#projects">
+              <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+              Explore projects
+            </a>
+            <a class="btn btn-outlined" href="https://github.com/Azturax" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+              Open GitHub
+            </a>
+          </div>
+          <div class="stats" aria-label="Catalog snapshot">
+            <div class="stat">
+              <strong id="stat-repos">2</strong>
+              <span>Public projects</span>
+            </div>
+            <div class="stat">
+              <strong id="stat-types">2</strong>
+              <span>Project types</span>
+            </div>
+            <div class="stat">
+              <strong id="stat-updated">2026</strong>
+              <span>Last updated</span>
+            </div>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="Featured project types">
+          <p class="hero-panel-label">On the shelf</p>
+          <div class="featured-stack" id="featured-stack"></div>
+        </aside>
+      </section>
+
+      <div class="filters" id="filters" role="toolbar" aria-label="Filter projects by type"></div>
+      <div id="projects"></div>
+      <div id="catalog"></div>
+      <noscript>
+        <section class="section" id="mods">
+          <div class="section-head">
+            <div class="section-copy">
+              <h2>Minecraft Mods</h2>
+              <p>Companions, systems, and new ways to inhabit a world.</p>
+            </div>
+          </div>
+          <article class="project-card featured">
+            <div class="card-body">
+              <h3>Az's Companions</h3>
+              <p class="desc">A wholesome companion mod for Minecraft across NeoForge, Fabric, and Forge.</p>
+              <a class="btn btn-filled btn-sm" href="https://github.com/Azturax/Az_s_Companions">View on GitHub</a>
+            </div>
+          </article>
+        </section>
+        <section class="section" id="games">
+          <div class="section-head">
+            <div class="section-copy">
+              <h2>Games</h2>
+              <p>Playable experiments built around feel, timing, and atmosphere.</p>
+            </div>
+          </div>
+          <article class="project-card featured">
+            <div class="card-body">
+              <h3>PULSE</h3>
+              <p class="desc">A one-tap reflex game about rhythm, pacing, and split-second timing.</p>
+              <a class="btn btn-filled btn-sm" href="https://github.com/Azturax/PULSE">View on GitHub</a>
+            </div>
+          </article>
+        </section>
+      </noscript>
+
+      <section class="section" id="about">
+        <div class="about-grid">
+          <article class="about-card">
+            <h2>About the studio</h2>
+            <p>
+              AZTRX Studio is the public face of Azturax — Minecraft companions, playable
+              prototypes, and the tools around them. This site only lists repositories that
+              are public on GitHub, so the catalog grows as projects ship.
+            </p>
+            <p>
+              Work is grouped by type: mods for Minecraft, games you can play, and tools that
+              support the rest. New public repos are picked up automatically from the GitHub API.
+            </p>
+          </article>
+          <article class="contact-card">
+            <div class="profile">
+              <img
+                src="https://avatars.githubusercontent.com/u/189752227?v=4"
+                alt="Azturax avatar"
+                width="72"
+                height="72"
+              />
+              <div>
+                <strong>Azturax</strong>
+                <span>github.com/Azturax</span>
+              </div>
+            </div>
+            <h2>Follow along</h2>
+            <p style="color: var(--md-sys-color-on-surface-variant); margin: 0 0 1.25rem">
+              Source, issues, and releases live on GitHub. Stars and updates on the cards come
+              straight from there.
+            </p>
+            <a class="btn btn-tonal" href="https://github.com/Azturax" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined" aria-hidden="true">person</span>
+              Visit profile
+            </a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> AZTRX Studio</span>
+      <span>azturax.github.io</span>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

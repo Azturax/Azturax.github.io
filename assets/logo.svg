@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <rect width="80" height="80" rx="20" fill="url(#aztrx-mark)"/>
+  <path d="M22 56 L32.5 24h7L50 56h-7.2l-1.7-5.4H30.9L29.2 56H22zm10.2-11.2h9.6L37 32.2h-.2l-4.6 12.6zM52 24h7.4l8.6 32H60.2L58.4 49h-9.6L46.9 56H40l12-32zm3.6 19.2h6.8L58.8 32h-.2l-3 11.2z" fill="#F4F6FF"/>
+  <defs>
+    <linearGradient id="aztrx-mark" x1="8" y1="4" x2="76" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C6FFF"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+</svg>
