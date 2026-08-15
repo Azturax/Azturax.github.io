@@ -10,6 +10,7 @@ const els = {
   filters: document.getElementById("filters"),
   catalog: document.getElementById("catalog"),
   featuredStack: document.getElementById("featured-stack"),
+  showcaseTrack: document.getElementById("showcase-track"),
   statRepos: document.getElementById("stat-repos"),
   statTypes: document.getElementById("stat-types"),
   statUpdated: document.getElementById("stat-updated"),
@@ -101,13 +102,14 @@ function fallbackRepos() {
     }));
 }
 
-function renderFilters(repos) {
-  const present = new Set(repos.map((repo) => repo.category));
+function renderFilters() {
   const chips = [
     { id: "all", label: "All", icon: "apps" },
-    ...AZTRX.categories
-      .filter((category) => present.has(category.id))
-      .map((category) => ({ id: category.id, label: category.chip, icon: category.icon })),
+    ...AZTRX.categories.map((category) => ({
+      id: category.id,
+      label: category.chip,
+      icon: category.icon,
+    })),
   ];
 
   els.filters.innerHTML = chips
@@ -122,17 +124,74 @@ function renderFilters(repos) {
     .join("");
 }
 
+function showcasePicks(repos) {
+  const picks = [];
+  for (const name of ["Az_s_Companions", "PULSE"]) {
+    const repo = repos.find((item) => item.name === name);
+    if (repo) picks.push(repo);
+  }
+
+  const missing = (id) => !picks.some((item) => item.category === id);
+  const extra = (id) => repos.find((item) => item.category === id && !picks.includes(item));
+  if (missing("minecraft")) {
+    const repo = extra("minecraft");
+    if (repo) picks.push(repo);
+  }
+  if (missing("games")) {
+    const repo = extra("games");
+    if (repo) picks.push(repo);
+  }
+
+  return picks.slice(0, 2);
+}
+
+function showcaseCard(repo) {
+  const category = AZTRX.categories.find((item) => item.id === repo.category);
+  const home = repo.homepage && /^https?:\/\//.test(repo.homepage) ? repo.homepage : "";
+  const viewHref = home || `#${category.id}`;
+
+  return `
+    <article class="showcase-card">
+      <div class="card-media ${category.id}" aria-hidden="true">
+        <span class="material-symbols-outlined">${iconFor(repo, category)}</span>
+      </div>
+      <div class="showcase-body">
+        <span class="showcase-chip">
+          <span class="material-symbols-outlined" aria-hidden="true">${category.icon}</span>
+          ${escapeHtml(category.chip)}
+        </span>
+        <h3>${escapeHtml(displayName(repo))}</h3>
+        <p>${escapeHtml(description(repo))}</p>
+        <div class="card-actions">
+          <a class="btn btn-filled btn-sm" href="${escapeHtml(viewHref)}">
+            <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+            View
+          </a>
+          <a class="btn btn-tonal btn-sm" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined" aria-hidden="true">code</span>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderShowcase(repos) {
+  if (!els.showcaseTrack) return;
+  const picks = showcasePicks(repos);
+  els.showcaseTrack.innerHTML = picks.map(showcaseCard).join("");
+}
+
 function renderFeatured(repos) {
-  const picks = AZTRX.categories
-    .map((category) => repos.find((repo) => repo.category === category.id))
-    .filter(Boolean)
-    .slice(0, 3);
+  if (!els.featuredStack) return;
+  const picks = showcasePicks(repos);
 
   els.featuredStack.innerHTML = picks
     .map((repo) => {
       const category = AZTRX.categories.find((item) => item.id === repo.category);
       return `
-        <a class="mini-card" href="#${category.id}">
+        <a class="mini-card" href="#showcase">
           <div class="mini-icon">
             <span class="material-symbols-outlined" aria-hidden="true">${iconFor(repo, category)}</span>
           </div>
@@ -197,9 +256,10 @@ function cardMarkup(repo, category, featured) {
 
 function renderCatalog(repos) {
   const filtered = state.filter === "all" ? repos : repos.filter((repo) => repo.category === state.filter);
-  const visibleCategories = AZTRX.categories.filter((category) =>
-    filtered.some((repo) => repo.category === category.id),
-  );
+  const visibleCategories =
+    state.filter === "all"
+      ? AZTRX.categories
+      : AZTRX.categories.filter((category) => category.id === state.filter);
 
   if (!visibleCategories.length) {
     els.catalog.innerHTML = `<p class="empty-state">No public projects in this section yet.</p>`;
@@ -209,9 +269,11 @@ function renderCatalog(repos) {
   els.catalog.innerHTML = visibleCategories
     .map((category) => {
       const items = filtered.filter((repo) => repo.category === category.id);
-      const cards = items
-        .map((repo, index) => cardMarkup(repo, category, items.length === 1 || index === 0))
-        .join("");
+      const cards = items.length
+        ? items
+            .map((repo, index) => cardMarkup(repo, category, items.length === 1 || index === 0))
+            .join("")
+        : `<p class="empty-state">No public projects in this section yet.</p>`;
 
       return `
         <section class="section" id="${category.id}" aria-labelledby="${category.id}-title">
@@ -250,7 +312,8 @@ function renderStats(repos) {
 
 function render(repos) {
   state.repos = repos;
-  renderFilters(repos);
+  renderFilters();
+  renderShowcase(repos);
   renderFeatured(repos);
   renderCatalog(repos);
   renderStats(repos);
@@ -261,7 +324,7 @@ els.filters?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-filter]");
   if (!button) return;
   state.filter = button.dataset.filter;
-  renderFilters(state.repos);
+  renderFilters();
   renderCatalog(state.repos);
 });
 

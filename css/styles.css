@@ -499,6 +499,119 @@ button,
   opacity: 0.8;
 }
 
+.showcase {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter) 2.5rem;
+}
+
+.showcase-banner {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 32px;
+  background: var(--md-sys-color-surface-container-lowest);
+  box-shadow: var(--md-sys-elevation-2);
+}
+
+.showcase-banner::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -60px;
+  top: -80px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--md-sys-color-primary) 22%, transparent);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.showcase-head {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.25rem;
+}
+
+.showcase-head .kicker {
+  margin-bottom: 0.75rem;
+}
+
+.showcase-head h2 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.showcase-head p {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.showcase-track {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.showcase-card {
+  display: grid;
+  grid-template-rows: 168px 1fr;
+  min-height: 100%;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-low);
+  overflow: hidden;
+  transition: transform 220ms var(--ease-emphasized), box-shadow 220ms var(--ease-standard);
+}
+
+.showcase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--md-sys-elevation-3);
+}
+
+.showcase-body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+
+.showcase-body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.showcase-body p {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.showcase-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.showcase-chip .material-symbols-outlined {
+  font-size: 1.05rem;
+}
+
 .section {
   max-width: var(--content-max);
   margin: 0 auto;
@@ -617,6 +730,13 @@ button,
   overflow: hidden;
 }
 
+.card-media.minecraft,
+.card-media.mods {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, #86efac 45%, transparent), transparent 48%),
+    linear-gradient(160deg, #14532d, #22c55e 70%);
+}
+
 .card-media.games {
   background:
     radial-gradient(circle at 80% 10%, color-mix(in srgb, #ffb77a 50%, transparent), transparent 45%),
@@ -629,6 +749,7 @@ button,
     linear-gradient(160deg, #0f766e, #14b8a6);
 }
 
+.card-media.misc,
 .card-media.other {
   background: linear-gradient(160deg, #334155, #64748b);
 }
@@ -1039,7 +1160,8 @@ button,
   .hero,
   .about-grid,
   .donate-panel,
-  .project-card.featured {
+  .project-card.featured,
+  .showcase-track {
     grid-template-columns: 1fr;
   }
 

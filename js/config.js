@@ -9,8 +9,8 @@ function escapeHtml(value) {
 const AZTRX = {
   githubUser: "Azturax",
   githubUrl: "https://github.com/Azturax",
-  excludeRepos: ["AZTRX.github.io", "Azturax.github.io", "Az_s_Companions"],
-  excludeCategories: ["mods"],
+  excludeRepos: ["AZTRX.github.io", "Azturax.github.io"],
+  excludeCategories: [],
   store: {
     polarOrg: "azturax",
     polarStorefront: "https://polar.sh/azturax",
@@ -93,6 +93,13 @@ const AZTRX = {
   },
   categories: [
     {
+      id: "minecraft",
+      title: "Minecraft",
+      subtitle: "Companions, systems, and new ways to inhabit a world.",
+      icon: "pets",
+      chip: "Minecraft",
+    },
+    {
       id: "games",
       title: "Games",
       subtitle: "Playable experiments built around feel, timing, and atmosphere.",
@@ -101,20 +108,28 @@ const AZTRX = {
     },
     {
       id: "tools",
-      title: "Tools & Apps",
+      title: "Tools",
       subtitle: "Utilities and software that support the rest of the work.",
       icon: "terminal",
       chip: "Tools",
     },
     {
-      id: "other",
-      title: "Other projects",
+      id: "misc",
+      title: "Misc",
       subtitle: "Everything else that does not fit a dedicated shelf yet.",
       icon: "auto_awesome",
-      chip: "Other",
+      chip: "Misc",
     },
   ],
   curated: {
+    Az_s_Companions: {
+      displayName: "Az's Companions",
+      category: "minecraft",
+      tagline:
+        "A wholesome companion mod for Minecraft. Follow, gather, gift, and explore together across NeoForge, Fabric, and Forge.",
+      highlights: ["Minecraft 1.20.1–1.21.5", "NeoForge · Fabric · Forge", "Companion AI"],
+      icon: "pets",
+    },
     PULSE: {
       displayName: "PULSE",
       category: "games",
@@ -138,7 +153,7 @@ function categorizeRepo(repo) {
     /minecraft|neoforge|fabric|forge|modrinth|curseforge|\bmod\b|companion/.test(haystack) ||
     repo.language === "Java"
   ) {
-    return "mods";
+    return "minecraft";
   }
 
   if (/game|pulse|reflex|rhythm|playable/.test(haystack)) {
@@ -149,5 +164,5 @@ function categorizeRepo(repo) {
     return "tools";
   }
 
-  return "other";
+  return "misc";
 }
