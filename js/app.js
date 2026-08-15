@@ -54,14 +54,6 @@ function iconFor(repo, category) {
   return AZTRX.curated[repo.name]?.icon || category.icon;
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
 async function fetchPublicRepos() {
   const url = `https://api.github.com/users/${AZTRX.githubUser}/repos?per_page=100&sort=updated`;
   const response = await fetch(url, {
@@ -87,23 +79,26 @@ async function fetchPublicRepos() {
       topics: repo.topics || [],
       license: repo.license?.spdx_id || repo.license?.name || "",
       category: categorizeRepo(repo),
-    }));
+    }))
+    .filter((repo) => !AZTRX.excludeCategories.includes(repo.category));
 }
 
 function fallbackRepos() {
-  return Object.entries(AZTRX.curated).map(([name, meta]) => ({
-    name,
-    description: meta.tagline,
-    html_url: `${AZTRX.githubUrl}/${name}`,
-    homepage: "",
-    language: name === "PULSE" ? "TypeScript" : "Java",
-    stargazers_count: 0,
-    forks_count: 0,
-    updated_at: "",
-    topics: [],
-    license: "",
-    category: meta.category,
-  }));
+  return Object.entries(AZTRX.curated)
+    .filter(([name, meta]) => !AZTRX.excludeRepos.includes(name) && !AZTRX.excludeCategories.includes(meta.category))
+    .map(([name, meta]) => ({
+      name,
+      description: meta.tagline,
+      html_url: `${AZTRX.githubUrl}/${name}`,
+      homepage: "",
+      language: name === "PULSE" ? "TypeScript" : "Java",
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: "",
+      topics: [],
+      license: "",
+      category: meta.category,
+    }));
 }
 
 function renderFilters(repos) {
@@ -154,6 +149,7 @@ function renderFeatured(repos) {
 
 function cardMarkup(repo, category, featured) {
   const curated = AZTRX.curated[repo.name];
+  const product = storeProductForRepo(repo.name);
   const highlights = curated?.highlights || [...(repo.topics || [])].slice(0, 3);
   const home = repo.homepage && /^https?:\/\//.test(repo.homepage) ? repo.homepage : "";
 
@@ -180,13 +176,14 @@ function cardMarkup(repo, category, featured) {
             : ""
         }
         <div class="card-actions">
-          <a class="btn btn-filled btn-sm" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+          ${product ? storeBuyButton(product, "btn-sm") : ""}
+          <a class="btn ${product ? "btn-tonal" : "btn-filled"} btn-sm" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
             <span class="material-symbols-outlined" aria-hidden="true">code</span>
             View on GitHub
           </a>
           ${
             home
-              ? `<a class="btn btn-tonal btn-sm" href="${escapeHtml(home)}" target="_blank" rel="noopener noreferrer">
+              ? `<a class="btn btn-outlined btn-sm" href="${escapeHtml(home)}" target="_blank" rel="noopener noreferrer">
                   <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
                   Open project
                 </a>`
@@ -257,6 +254,7 @@ function render(repos) {
   renderFeatured(repos);
   renderCatalog(repos);
   renderStats(repos);
+  initPolarEmbed();
 }
 
 els.filters?.addEventListener("click", (event) => {
@@ -270,6 +268,7 @@ els.filters?.addEventListener("click", (event) => {
 els.themeToggle?.addEventListener("click", () => {
   const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   applyTheme(next);
+  refreshPolarThemes();
 });
 
 window.addEventListener("scroll", () => {

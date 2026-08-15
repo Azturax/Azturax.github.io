@@ -6,13 +6,13 @@
     <meta name="theme-color" content="#111318" />
     <meta
       name="description"
-      content="AZTRX Studio — public games, Minecraft mods, and experiments from Azturax."
+      content="AZTRX Studio — public games and experiments from Azturax."
     />
     <meta property="og:title" content="AZTRX Studio" />
-    <meta property="og:description" content="Public games, Minecraft mods, and experiments." />
+    <meta property="og:description" content="Public games and experiments." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://azturax.github.io/" />
-    <title>AZTRX Studio — Games, Mods & Experiments</title>
+    <title>AZTRX Studio — Games & Experiments</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <script>
       (function () {
@@ -45,8 +45,9 @@
         </span>
       </a>
       <nav class="nav-pills" aria-label="Primary">
+        <a href="#donate">Donate</a>
+        <a href="#shop">Shop</a>
         <a href="#projects">Projects</a>
-        <a href="#mods">Mods</a>
         <a href="#games">Games</a>
         <a href="#about">About</a>
       </nav>
@@ -67,17 +68,25 @@
           </p>
           <h1>AZTRX<span>Studio</span></h1>
           <p class="lede">
-            The public home of AZTRX Studio — Minecraft mods, games, and experiments,
+            The public home of AZTRX Studio — games and experiments,
             grouped by type. Live from GitHub, at azturax.github.io.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-filled" href="#projects">
+            <a class="btn btn-filled" href="#donate">
+              <span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span>
+              Donate
+            </a>
+            <a class="btn btn-tonal" href="#shop">
+              <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+              Shop
+            </a>
+            <a class="btn btn-outlined" href="#projects">
               <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
               Explore projects
             </a>
             <a class="btn btn-outlined" href="https://github.com/Azturax" target="_blank" rel="noopener noreferrer">
               <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
-              Open GitHub
+              GitHub
             </a>
           </div>
           <div class="stats" aria-label="Catalog snapshot">
@@ -101,25 +110,55 @@
         </aside>
       </section>
 
+      <section class="section" id="donate" aria-labelledby="donate-title">
+        <div class="section-head">
+          <div class="section-copy">
+            <h2 id="donate-title">
+              <span class="section-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span>
+              </span>
+              Donate
+            </h2>
+            <p>
+              Monthly ranks keep the studio going. Or leave a one-time tip from €6 —
+              no subscription needed.
+            </p>
+          </div>
+        </div>
+        <p class="status-banner" id="donate-status">
+          Polar checkout is not connected yet. Ranks and one-time tips still work through
+          <a href="https://github.com/sponsors/Azturax" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.
+        </p>
+        <div class="rank-grid" id="rank-grid"></div>
+        <div class="donate-panel" id="donate-panel"></div>
+      </section>
+
+      <section class="section" id="shop" aria-labelledby="shop-title">
+        <div class="section-head">
+          <div class="section-copy">
+            <h2 id="shop-title">
+              <span class="section-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">storefront</span>
+              </span>
+              Shop
+            </h2>
+            <p>
+              Games are free. Paying is optional — choose any amount from €6.
+              To support the studio itself, use Donate.
+            </p>
+          </div>
+        </div>
+        <p class="status-banner" id="store-status">
+          Direct checkout is almost ready. Until Polar products are live, you can
+          <a href="https://github.com/sponsors/Azturax" target="_blank" rel="noopener noreferrer">support AZTRX Studio on GitHub Sponsors</a>.
+        </p>
+        <div class="store-grid" id="store-grid"></div>
+      </section>
+
       <div class="filters" id="filters" role="toolbar" aria-label="Filter projects by type"></div>
       <div id="projects"></div>
       <div id="catalog"></div>
       <noscript>
-        <section class="section" id="mods">
-          <div class="section-head">
-            <div class="section-copy">
-              <h2>Minecraft Mods</h2>
-              <p>Companions, systems, and new ways to inhabit a world.</p>
-            </div>
-          </div>
-          <article class="project-card featured">
-            <div class="card-body">
-              <h3>Az's Companions</h3>
-              <p class="desc">A wholesome companion mod for Minecraft across NeoForge, Fabric, and Forge.</p>
-              <a class="btn btn-filled btn-sm" href="https://github.com/Azturax/Az_s_Companions">View on GitHub</a>
-            </div>
-          </article>
-        </section>
         <section class="section" id="games">
           <div class="section-head">
             <div class="section-copy">
@@ -142,12 +181,12 @@
           <article class="about-card">
             <h2>About the studio</h2>
             <p>
-              AZTRX Studio is the public face of Azturax — Minecraft companions, playable
-              prototypes, and the tools around them. This site only lists repositories that
+              AZTRX Studio is the public face of Azturax — playable prototypes
+              and the tools around them. This site only lists repositories that
               are public on GitHub, so the catalog grows as projects ship.
             </p>
             <p>
-              Work is grouped by type: mods for Minecraft, games you can play, and tools that
+              Work is grouped by type: games you can play, and tools that
               support the rest. New public repos are picked up automatically from the GitHub API.
             </p>
           </article>
@@ -180,10 +219,20 @@
 
     <footer class="footer">
       <span>© <span id="year">2026</span> AZTRX Studio</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#donate">Donate</a>
+        <a href="#shop">Shop</a>
+      </nav>
       <span>azturax.github.io</span>
     </footer>
 
     <script src="js/config.js"></script>
+    <script src="js/store.js"></script>
     <script src="js/app.js"></script>
+    <script
+      defer
+      data-auto-init
+      src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@latest/dist/embed.global.js"
+    ></script>
   </body>
 </html>

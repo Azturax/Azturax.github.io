@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111318" />
+    <title>Thank you — AZTRX Studio</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("aztrx-theme");
+        var theme = saved || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..600,0..1,0" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="top-app-bar">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.svg" alt="" width="40" height="40" />
+        <span class="brand-lockup">
+          <span class="brand-name">AZTRX</span>
+          <span class="brand-tag">Studio</span>
+        </span>
+      </a>
+    </header>
+    <main class="hero" style="grid-template-columns: 1fr; min-height: 70vh">
+      <div>
+        <p class="kicker">
+          <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+          Payment received
+        </p>
+        <h1>Thank you<span>for backing AZTRX</span></h1>
+        <p class="lede">
+          Polar emailed your receipt. Rank support and one-time tips go to AZTRX Studio.
+          If you backed a game, download links are in that same email.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-filled" href="index.html#donate">Back to Donate</a>
+          <a class="btn btn-tonal" href="index.html#shop">Back to the shop</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
