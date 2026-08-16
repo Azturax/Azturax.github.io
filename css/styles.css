@@ -654,6 +654,12 @@ button,
   color: var(--md-sys-color-on-tertiary-container);
 }
 
+.section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -735,6 +741,18 @@ button,
   background:
     radial-gradient(circle at 20% 20%, color-mix(in srgb, #86efac 45%, transparent), transparent 48%),
     linear-gradient(160deg, #14532d, #22c55e 70%);
+}
+
+.card-media.packs {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, #bbf7d0 45%, transparent), transparent 48%),
+    linear-gradient(160deg, #14532d, #65a30d 70%);
+}
+
+.card-media.datapack {
+  background:
+    radial-gradient(circle at 80% 20%, color-mix(in srgb, #fde68a 45%, transparent), transparent 48%),
+    linear-gradient(160deg, #7c2d12, #d97706 70%);
 }
 
 .card-media.games {

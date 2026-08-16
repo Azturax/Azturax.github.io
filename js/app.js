@@ -1,6 +1,7 @@
 const state = {
   repos: [],
   filter: "all",
+  minecraftTab: location.hash === "#minecraft-packs" ? "packs" : "mods",
 };
 
 const els = {
@@ -206,6 +207,70 @@ function renderFeatured(repos) {
     .join("");
 }
 
+function packDownload(pack) {
+  return `${AZTRX.packsRepo.url}/releases/latest/download/${pack.id}.zip`;
+}
+
+function packCard(pack, featured) {
+  const kindLabel = pack.kind === "datapack" ? "Datapack" : "Resource pack";
+  const mediaClass = pack.kind === "datapack" ? "datapack" : "packs";
+
+  return `
+    <article class="project-card${featured ? " featured" : ""}">
+      <div class="card-media ${mediaClass}" aria-hidden="true">
+        <span class="material-symbols-outlined">${escapeHtml(pack.icon)}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="badge lang">${escapeHtml(kindLabel)}</span>
+          ${pack.versions ? `<span class="badge">${escapeHtml(pack.versions)}</span>` : ""}
+        </div>
+        <h3>${escapeHtml(pack.name)}</h3>
+        <p class="desc">${escapeHtml(pack.tagline)}</p>
+        ${
+          pack.highlights?.length
+            ? `<ul class="highlights">${pack.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+            : ""
+        }
+        <div class="card-actions">
+          <a class="btn btn-filled btn-sm" href="${escapeHtml(packDownload(pack))}">
+            <span class="material-symbols-outlined" aria-hidden="true">download</span>
+            Download
+          </a>
+          ${
+            pack.curseforge
+              ? `<a class="btn btn-tonal btn-sm" href="${escapeHtml(pack.curseforge)}" target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined" aria-hidden="true">storefront</span>
+                  CurseForge
+                </a>`
+              : ""
+          }
+          <a class="btn btn-outlined btn-sm" href="${escapeHtml(AZTRX.packsRepo.url)}" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined" aria-hidden="true">code</span>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function minecraftTabs() {
+  const tab = state.minecraftTab === "packs" ? "packs" : "mods";
+  return `
+    <div class="section-tabs" role="tablist" aria-label="Minecraft catalog">
+      <button class="chip" type="button" role="tab" data-mc-tab="mods" aria-selected="${tab === "mods"}" aria-pressed="${tab === "mods"}">
+        <span class="material-symbols-outlined" aria-hidden="true">extension</span>
+        Mods
+      </button>
+      <button class="chip" type="button" role="tab" data-mc-tab="packs" aria-selected="${tab === "packs"}" aria-pressed="${tab === "packs"}">
+        <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
+        Resource Packs / Datapacks
+      </button>
+    </div>
+  `;
+}
+
 function cardMarkup(repo, category, featured) {
   const curated = AZTRX.curated[repo.name];
   const product = storeProductForRepo(repo.name);
@@ -269,14 +334,21 @@ function renderCatalog(repos) {
   els.catalog.innerHTML = visibleCategories
     .map((category) => {
       const items = filtered.filter((repo) => repo.category === category.id);
-      const cards = items.length
-        ? items
-            .map((repo, index) => cardMarkup(repo, category, items.length === 1 || index === 0))
-            .join("")
-        : `<p class="empty-state">No public projects in this section yet.</p>`;
+      const showPacks = category.id === "minecraft" && state.minecraftTab === "packs";
+      const packs = AZTRX.packs || [];
+      const cards = showPacks
+        ? packs.length
+          ? packs.map((pack, index) => packCard(pack, index === 0)).join("")
+          : `<p class="empty-state">No public packs in this section yet.</p>`
+        : items.length
+          ? items
+              .map((repo, index) => cardMarkup(repo, category, items.length === 1 || index === 0))
+              .join("")
+          : `<p class="empty-state">No public projects in this section yet.</p>`;
 
       return `
         <section class="section" id="${category.id}" aria-labelledby="${category.id}-title">
+          ${category.id === "minecraft" ? `<span id="minecraft-packs" hidden></span>` : ""}
           <div class="section-head">
             <div class="section-copy">
               <h2 id="${category.id}-title">
@@ -287,6 +359,7 @@ function renderCatalog(repos) {
               </h2>
               <p>${escapeHtml(category.subtitle)}</p>
             </div>
+            ${category.id === "minecraft" ? minecraftTabs() : ""}
           </div>
           <div class="project-grid">
             ${cards}
@@ -325,6 +398,22 @@ els.filters?.addEventListener("click", (event) => {
   if (!button) return;
   state.filter = button.dataset.filter;
   renderFilters();
+  renderCatalog(state.repos);
+});
+
+els.catalog?.addEventListener("click", (event) => {
+  const tab = event.target.closest("[data-mc-tab]");
+  if (!tab) return;
+  state.minecraftTab = tab.dataset.mcTab === "packs" ? "packs" : "mods";
+  history.replaceState(null, "", state.minecraftTab === "packs" ? "#minecraft-packs" : "#minecraft");
+  renderCatalog(state.repos);
+});
+
+window.addEventListener("hashchange", () => {
+  const next = location.hash === "#minecraft-packs" ? "packs" : "mods";
+  if (location.hash !== "#minecraft" && location.hash !== "#minecraft-packs") return;
+  if (state.minecraftTab === next) return;
+  state.minecraftTab = next;
   renderCatalog(state.repos);
 });
 
