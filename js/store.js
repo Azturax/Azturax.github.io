@@ -359,8 +359,97 @@ function renderDonate() {
   initPolarEmbed();
 }
 
+function formatKeyPrice(product) {
+  return product.priceLabel || `${AZTRX.store.currencySymbol}${product.amount}`;
+}
+
+function aureumKeyBuyHref(product) {
+  if (product.checkoutLink) return product.checkoutLink;
+  if (product.mailto) return product.mailto;
+  return AZTRX.store.sponsorsUrl || "#aureum-keys";
+}
+
+function aureumKeyBuyButton(product) {
+  const href = aureumKeyBuyHref(product);
+  const ready = Boolean(product.checkoutLink);
+  const label = ready ? `Buy ${formatKeyPrice(product)}` : `Buy ${formatKeyPrice(product)} (request)`;
+  const external = href.startsWith("http") || href.startsWith("mailto:");
+
+  if (ready) {
+    return `
+      <a
+        class="btn btn-filled"
+        href="${escapeHtml(href)}"
+        data-polar-checkout
+        data-polar-checkout-theme="${polarTheme()}"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">key</span>
+        ${escapeHtml(label)}
+      </a>
+    `;
+  }
+
+  return `
+    <a
+      class="btn btn-filled"
+      href="${escapeHtml(href)}"
+      ${external ? 'target="_blank" rel="noopener noreferrer"' : ""}
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">key</span>
+      ${escapeHtml(label)}
+    </a>
+  `;
+}
+
+function renderAureumKeys() {
+  const root = document.getElementById("aureum-keys-grid");
+  if (!root || !AZTRX.aureumKeys?.products) return;
+
+  const ready = AZTRX.aureumKeys.products.some((product) => product.checkoutLink);
+  const banner = document.getElementById("aureum-keys-status");
+  if (banner) banner.classList.toggle("hidden", ready);
+
+  root.innerHTML = AZTRX.aureumKeys.products
+    .map(
+      (product) => `
+        <article class="rank-card" id="key-${escapeHtml(product.id)}">
+          <div class="card-media ${escapeHtml(product.rank)}" aria-hidden="true">
+            <span class="material-symbols-outlined">${escapeHtml(product.icon)}</span>
+          </div>
+          <div class="card-body">
+            <div class="price-row">
+              <strong class="price">${escapeHtml(formatKeyPrice(product))}</strong>
+              <span class="price-note">one-time key</span>
+            </div>
+            <h3>${escapeHtml(product.name)}</h3>
+            <p class="desc">${escapeHtml(product.tagline || "")}</p>
+            <ul class="rank-benefits">
+              ${(product.includes || [])
+                .map(
+                  (item) => `
+                    <li>
+                      <span class="material-symbols-outlined" aria-hidden="true">check</span>
+                      ${escapeHtml(item)}
+                    </li>
+                  `,
+                )
+                .join("")}
+            </ul>
+            <div class="card-actions">
+              ${aureumKeyBuyButton(product)}
+            </div>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+
+  initPolarEmbed();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderStore();
   renderRanks();
   renderDonate();
+  renderAureumKeys();
 });

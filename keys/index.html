@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111318" />
+    <meta
+      name="description"
+      content="Buy Aureum launcher support keys — Supporter €2.50 and Patron €7.50. Cosmetics only; not a Minecraft purchase."
+    />
+    <meta property="og:title" content="Aureum keys — AZTRX Studio" />
+    <meta
+      property="og:description"
+      content="Redeem keys for Aureum launcher themes and badges. Supporter €2.50 · Patron €7.50."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://azturax.github.io/keys/" />
+    <title>Aureum keys — AZTRX Studio</title>
+    <link rel="canonical" href="https://azturax.github.io/keys/" />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("aztrx-theme");
+        var theme = saved || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Roboto:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..600,0..1,0"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css?v=5" />
+  </head>
+  <body>
+    <a class="skip-link" href="#aureum-keys">Skip to keys</a>
+
+    <header class="top-app-bar" id="top-app-bar">
+      <a class="brand" href="/">
+        <img src="../assets/logo.svg" alt="" width="40" height="40" />
+        <span class="brand-lockup">
+          <span class="brand-name">AZTRX</span>
+          <span class="brand-tag">Studio</span>
+        </span>
+      </a>
+      <nav class="nav-pills" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/#donate">Donate</a>
+        <a href="/#shop">Shop</a>
+        <a href="/keys/" aria-current="page">Aureum keys</a>
+        <a href="/#projects">Projects</a>
+      </nav>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+      </button>
+      <a
+        class="icon-btn"
+        href="https://github.com/Azturax"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="AZTRX Studio on GitHub"
+      >
+        <span class="material-symbols-outlined">code</span>
+      </a>
+    </header>
+
+    <main class="main" id="top">
+      <section class="hero">
+        <div>
+          <p class="kicker">
+            <span class="material-symbols-outlined" aria-hidden="true">key</span>
+            Aureum launcher
+          </p>
+          <h1>Support <span>keys</span></h1>
+          <p class="lede">
+            One-time redeem keys for Aureum ranks. Supporter unlocks extra accents;
+            Patron unlocks every shop theme. Play, login, and mods stay free.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-filled" href="#aureum-keys">
+              <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+              Choose a key
+            </a>
+            <a class="btn btn-outlined" href="/">
+              <span class="material-symbols-outlined" aria-hidden="true">home</span>
+              Studio home
+            </a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="How redeem works">
+          <p class="hero-panel-label">After purchase</p>
+          <div class="featured-stack">
+            <div class="mini-card">
+              <div class="mini-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+              </div>
+              <div>
+                <h3>Get your key</h3>
+                <p>Checkout (or mailto request) delivers a redeem string.</p>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">desktop_windows</span>
+              </div>
+              <div>
+                <h3>Open Aureum → Shop</h3>
+                <p>Paste the key and redeem. Preview keys remain for local testing.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="aureum-keys" aria-labelledby="aureum-keys-title">
+        <div class="section-head">
+          <div class="section-copy">
+            <h2 id="aureum-keys-title">
+              <span class="section-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">key</span>
+              </span>
+              Aureum keys
+            </h2>
+            <p>
+              Matches the launcher shop ranks: Free €0 · Supporter €2.50 · Patron €7.50.
+            </p>
+          </div>
+        </div>
+        <p class="status-banner" id="aureum-keys-status">
+          Checkout is not live yet. Paste Gumroad / Ko-fi / Polar / Stripe Payment Link URLs into
+          <code>js/config.js</code> (<code>aureumKeys.products[].checkoutLink</code>).
+          Until then, Buy opens a mailto request.
+        </p>
+        <p class="status-banner">
+          Not a Minecraft purchase. Not approved by or associated with Mojang or Microsoft.
+          Keys unlock launcher cosmetics only — themes and badges, never gameplay.
+        </p>
+        <div class="rank-grid" id="aureum-keys-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> AZTRX Studio</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Home</a>
+        <a href="/keys/">Aureum keys</a>
+      </nav>
+      <span>azturax.github.io/keys/</span>
+    </footer>
+
+    <script src="../js/config.js?v=5"></script>
+    <script src="../js/store.js?v=5"></script>
+    <script src="../js/app.js?v=5"></script>
+    <script
+      defer
+      data-auto-init
+      src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@latest/dist/embed.global.js"
+    ></script>
+  </body>
+</html>

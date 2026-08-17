@@ -31,7 +31,7 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..600,0..1,0"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=4" />
+    <link rel="stylesheet" href="css/styles.css?v=5" />
   </head>
   <body>
     <a class="skip-link" href="#projects">Skip to projects</a>
@@ -47,6 +47,7 @@
       <nav class="nav-pills" aria-label="Primary">
         <a href="#donate">Donate</a>
         <a href="#shop">Shop</a>
+        <a href="/keys/">Aureum keys</a>
         <a href="#showcase">Featured</a>
         <a href="#projects">Projects</a>
         <a href="#minecraft">Minecraft</a>
@@ -81,6 +82,10 @@
             <a class="btn btn-tonal" href="#shop">
               <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
               Shop
+            </a>
+            <a class="btn btn-outlined" href="/keys/">
+              <span class="material-symbols-outlined" aria-hidden="true">key</span>
+              Aureum keys
             </a>
             <a class="btn btn-outlined" href="#projects">
               <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
@@ -169,6 +174,34 @@
           <a href="https://github.com/sponsors/Azturax" target="_blank" rel="noopener noreferrer">support AZTRX Studio on GitHub Sponsors</a>.
         </p>
         <div class="store-grid" id="store-grid"></div>
+      </section>
+
+      <section class="section" id="aureum-keys" aria-labelledby="aureum-keys-title">
+        <div class="section-head">
+          <div class="section-copy">
+            <h2 id="aureum-keys-title">
+              <span class="section-icon">
+                <span class="material-symbols-outlined" aria-hidden="true">key</span>
+              </span>
+              Aureum launcher keys
+            </h2>
+            <p>
+              Redeem keys for Supporter (€2.50) and Patron (€7.50) ranks in the Aureum
+              Minecraft launcher. Cosmetics only — themes and badges, never gameplay.
+            </p>
+          </div>
+          <a class="btn btn-outlined" href="/keys/">Open keys page</a>
+        </div>
+        <p class="status-banner" id="aureum-keys-status">
+          Checkout links are placeholders until Gumroad / Ko-fi / Polar / Stripe Payment Links
+          are pasted into <code>js/config.js</code>. Until then, Buy opens a mailto request.
+          Redeem the key inside Aureum → Shop.
+        </p>
+        <p class="status-banner">
+          Not a Minecraft purchase. Not approved by or associated with Mojang or Microsoft.
+          Keys unlock launcher cosmetics only.
+        </p>
+        <div class="rank-grid" id="aureum-keys-grid"></div>
       </section>
 
       <div class="filters" id="filters" role="toolbar" aria-label="Filter projects by type"></div>
@@ -261,13 +294,14 @@
       <nav class="footer-links" aria-label="Footer">
         <a href="#donate">Donate</a>
         <a href="#shop">Shop</a>
+        <a href="/keys/">Aureum keys</a>
       </nav>
       <span>azturax.github.io</span>
     </footer>
 
-    <script src="js/config.js?v=4"></script>
-    <script src="js/store.js?v=4"></script>
-    <script src="js/app.js?v=4"></script>
+    <script src="js/config.js?v=5"></script>
+    <script src="js/store.js?v=5"></script>
+    <script src="js/app.js?v=5"></script>
     <script
       defer
       data-auto-init

@@ -797,6 +797,18 @@ button,
     linear-gradient(160deg, #2e1065, #7c3aed 68%);
 }
 
+.card-media.supporter {
+  background:
+    radial-gradient(circle at 25% 20%, color-mix(in srgb, #ffd54f 45%, transparent), transparent 50%),
+    linear-gradient(160deg, #c2410c, #ffa726 72%);
+}
+
+.card-media.patron {
+  background:
+    radial-gradient(circle at 75% 15%, color-mix(in srgb, #fde68a 55%, transparent), transparent 48%),
+    linear-gradient(160deg, #92400e, #f59e0b 68%);
+}
+
 .card-media .material-symbols-outlined {
   font-size: 4rem;
   color: #fff;

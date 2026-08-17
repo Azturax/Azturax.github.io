@@ -36,6 +36,56 @@ const AZTRX = {
       },
     ],
   },
+  /**
+   * Aureum launcher support keys (cosmetics only).
+   * Matches MC-launcher ranks: Supporter €2.50, Patron €7.50.
+   * TODO: paste real Gumroad / Ko-fi / Polar / Stripe Payment Link URLs into checkoutLink.
+   */
+  aureumKeys: {
+    path: "/keys/",
+    currency: "EUR",
+    currencySymbol: "€",
+    disclaimer:
+      "Aureum keys unlock launcher cosmetics only. Not a Minecraft purchase. Not associated with Mojang or Microsoft.",
+    products: [
+      {
+        id: "aureum-supporter",
+        rank: "supporter",
+        name: "Aureum Supporter key",
+        amount: 2.5,
+        priceLabel: "€2.50",
+        icon: "palette",
+        tagline: "Extra accents and a rail badge in the Aureum launcher.",
+        includes: [
+          "One redeem key for Supporter rank",
+          "Theme accents beyond the free set",
+          "Cosmetics only — launch and mods stay free",
+        ],
+        // TODO: replace with Gumroad / Ko-fi / Polar / Stripe Payment Link
+        checkoutLink: "",
+        mailto:
+          "mailto:azturax@users.noreply.github.com?subject=Aureum%20Supporter%20key%20(%E2%82%AC2.50)",
+      },
+      {
+        id: "aureum-patron",
+        rank: "patron",
+        name: "Aureum Patron key",
+        amount: 7.5,
+        priceLabel: "€7.50",
+        icon: "workspace_premium",
+        tagline: "Every shop theme plus a gold mark in the Aureum launcher.",
+        includes: [
+          "One redeem key for Patron rank",
+          "All Supporter themes plus Patron exclusives",
+          "Cosmetics only — launch and mods stay free",
+        ],
+        // TODO: replace with Gumroad / Ko-fi / Polar / Stripe Payment Link
+        checkoutLink: "",
+        mailto:
+          "mailto:azturax@users.noreply.github.com?subject=Aureum%20Patron%20key%20(%E2%82%AC7.50)",
+      },
+    ],
+  },
   donate: {
     id: "donate",
     checkoutLink: "",
